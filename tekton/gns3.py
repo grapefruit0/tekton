@@ -121,7 +121,13 @@ class GNS3Topo(object):
 
         # Clean up
         shutil.rmtree(out_folder, True)
-        os.mkdir(out_folder)
+        # modified by yongzheng for OSError: [Errno 2] No such file or directory:
+		# os.mkdir(out_folder)
+        try:
+			os.makedirs(out_folder)
+        except OSError:
+			if not os.path.isdir(out_folder):
+				raise
 
         topo_file = os.path.join(out_folder, 'topo.ini')
         topo_file_str = self.get_gns3_topo()
@@ -129,7 +135,15 @@ class GNS3Topo(object):
             fhandle.write(topo_file_str)
 
         configs_folder = os.path.join(out_folder, 'configs')
-        os.mkdir(configs_folder)
+
+        # modified by yongzheng for OSError: [Errno 2] No such file or directory:
+        # os.mkdir(configs_folder)
+        try:
+			os.makedirs(configs_folder)
+        except OSError:
+			if not os.path.isdir(configs_folder):
+				raise
+
         for node in sorted(list(self.graph.routers_iter())):
             cfg = self.gen_router_config(node)
             cfg_file = os.path.join(configs_folder, "%s.cfg" % node)

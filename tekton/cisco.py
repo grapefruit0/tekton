@@ -99,6 +99,11 @@ class CiscoConfigGen(object):
                 continue
             network = self.prefix_lookup(network)
             lineno = (i + 1) * 10
+			# added by yongzheng to check str(network) type
+			# if isinstance(str(network), bytes):
+			# 	  print("the type of str(network) is bytes")
+			# if isinstance(str(network), str):
+			# 	  print("the type of str(network) is string")
             network = ip_network(str(network))
             addr = str(getattr(network, 'network_address', network))
             prefixlen = getattr(network, 'prefixlen', 32)
